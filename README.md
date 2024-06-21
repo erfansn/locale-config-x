@@ -17,7 +17,7 @@ dependencyResolutionManagement {
 - Step 2: Add the dependency to build script file
 ```gradle
 dependency {
-    implementation("com.github.erfansn:locale-config-x:1.0.0")
+    implementation("com.github.erfansn:locale-config-x:{latest_version}")
 }
 ```
 
