@@ -79,12 +79,12 @@ publishing {
 
             pom {
                 name = "Locale Config X"
-                description = "A compatible utility functions to deal with locale config's attributes."
+                description = "Access to in the per-app language configuration's locales in all android version."
                 url = "https://github.com/erfansn/locale-config-x"
                 licenses {
                     license {
                         name = "MIT License"
-                        url = "https://mit-license.org/"
+                        url = "https://github.com/erfansn/locale-config-x/blob/master/LICENSE"
                     }
                 }
             }
