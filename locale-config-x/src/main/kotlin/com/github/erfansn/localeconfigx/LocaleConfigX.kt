@@ -29,6 +29,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.LocaleManagerCompat
 import androidx.core.os.LocaleListCompat
 import org.xmlpull.v1.XmlPullParser
+import java.io.FileNotFoundException
 import java.util.Locale
 
 /**
@@ -64,18 +65,7 @@ private fun LocaleListCompat.primarySystemLocaleOrFirst(context: Context): Local
 val Context.configuredLocales: LocaleListCompat
     @SuppressLint("DiscouragedApi")
     get() {
-        val localeConfigId = resources.assets.openXmlResourceParser("AndroidManifest.xml").use {
-            var id = -1
-            while (it.eventType != XmlPullParser.END_DOCUMENT) {
-                if (it.eventType == XmlPullParser.START_TAG && it.name == "application") {
-                    id = it.getAttributeResourceValue(it.indexOfAttribute("localeConfig"), -1)
-                    break
-                }
-                it.next()
-            }
-            if (id == -1) throw IllegalAccessException("The android:localeConfig attribute is not defined in application element inside of the AndroidManifest.xml!") else id
-        }
-
+        val localeConfigId = findLocaleConfigId()
         val tagsList = mutableListOf<String>()
         val xpp: XmlPullParser = resources.getXml(localeConfigId)
         while (xpp.eventType != XmlPullParser.END_DOCUMENT) {
@@ -86,6 +76,39 @@ val Context.configuredLocales: LocaleListCompat
         }
         return LocaleListCompat.forLanguageTags(tagsList.joinToString(","))
     }
+
+private fun Context.findLocaleConfigId(): Int {
+    /* In case the app is using split APKs (created from Android App Bundle), there are multiple
+     AndroidManifest.xml files and resources.assets.openXmlResourceParser("AndroidManifest.xml")
+     won't necessarily open the base APK's manifest, which contains the desired localeConfig
+     attribute. So we have to iterate over all possible APK files and check each one whether it
+     has a localeConfig. */
+    var cookie = 0
+    var id = -1
+
+    while (id == -1) {
+        try {
+            resources.assets.openXmlResourceParser(cookie, "AndroidManifest.xml").use {
+                while (it.eventType != XmlPullParser.END_DOCUMENT) {
+                    if (it.eventType == XmlPullParser.START_TAG && it.name == "application") {
+                        id = it.getAttributeResourceValue(
+                            it.indexOfAttribute("localeConfig"),
+                            -1
+                        )
+                        break
+                    }
+                    it.next()
+                }
+            }
+            cookie += 1
+        } catch (e: FileNotFoundException) {
+            break  // reached end of available APK files
+        }
+    }
+    val localeConfigId = id.takeIf { it != -1 }
+        ?: throw IllegalAccessException("The android:localeConfig attribute is not defined in application element inside of the AndroidManifest.xml!")
+    return localeConfigId
+}
 
 private fun XmlResourceParser.indexOfAttribute(attributeName: String): Int {
     for (index in 0..<attributeCount) {
