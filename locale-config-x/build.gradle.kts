@@ -75,7 +75,7 @@ publishing {
         create<MavenPublication>("release") {
             groupId = "com.github.erfansn"
             artifactId = "locale-config-x"
-            version = "1.0.1"
+            version = "1.1.0"
             afterEvaluate {
                 from(components["release"])
             }
