@@ -58,6 +58,10 @@ android {
             withSourcesJar()
         }
     }
+
+    testOptions {
+        targetSdk = 36
+    }
 }
 
 kotlin {

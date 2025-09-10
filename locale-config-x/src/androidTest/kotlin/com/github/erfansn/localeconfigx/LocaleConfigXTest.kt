@@ -65,7 +65,7 @@ class LocaleConfigXTest {
 
                 val currentLocale = activity.currentOrDefaultLocale
 
-                assertEquals(currentLocale, Locale("fa"))
+                assertEquals(Locale("fa"), currentLocale)
             }
         }
     }
@@ -80,7 +80,7 @@ class LocaleConfigXTest {
                     activity.currentOrDefaultLocale
                 }
 
-                assertEquals(currentLocale, Locale("fa"))
+                assertEquals(Locale("fa"), currentLocale)
             }
         }
     }
@@ -95,12 +95,12 @@ class LocaleConfigXTest {
                     activity.currentOrDefaultLocale
                 }
 
-                assertEquals(currentLocale, Locale("en"))
+                assertEquals(Locale("en"), currentLocale)
             }
         }
     }
 
-    // Only works on emulator
+    // Only works on emulator with AOSP image
     private fun <T> Context.withSystemLocales(localeList: LocaleList, block: () -> T): T {
         val localeManager = getSystemService<LocaleManager>()!!
         val previousSystemLocales = localeManager.systemLocales

@@ -38,25 +38,16 @@ import java.util.Locale
  */
 val Context.currentOrDefaultLocale: Locale
     get() = AppCompatDelegate.getApplicationLocales()[0]
-        ?: configuredLocales.primarySystemLocaleOrFirst(this)
+        ?: configuredLocales.bestEffortSystemLocaleOrFirst(this)
 
-private fun LocaleListCompat.primarySystemLocaleOrFirst(context: Context): Locale {
-    val primaryLang = LocaleManagerCompat.getSystemLocales(context)[0]!!
+private fun LocaleListCompat.bestEffortSystemLocaleOrFirst(context: Context): Locale {
+    val systemLocale = LocaleManagerCompat.getSystemLocales(context)
 
-    forEachIndexed { _, locale ->
-        if (locale == primaryLang) {
-            return locale
-        }
+    return systemLocale.getFirstMatch(this.toLanguageTags().split(",").toTypedArray())?.let {
+        it
+    } ?: run {
+        systemLocale[0]!!
     }
-
-    var targetLangIndex = 0
-    forEachIndexed { i, locale ->
-        if (locale matches primaryLang) {
-            targetLangIndex = i
-            return@forEachIndexed
-        }
-    }
-    return this[targetLangIndex]!!
 }
 
 /**
