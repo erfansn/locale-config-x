@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 /*
  * Copyright (c) 2024 Erfan Sn
  *
@@ -28,7 +30,7 @@ plugins {
 
 android {
     namespace = "com.github.erfansn.localeconfigx"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 21
@@ -50,14 +52,17 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
 
     publishing {
         singleVariant("release") {
             withSourcesJar()
         }
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_1_8
     }
 }
 
@@ -73,7 +78,7 @@ publishing {
 
             pom {
                 name = "Locale Config X"
-                description = "Access to in the per-app language configuration's locales in all android version."
+                description = "Access to the per-app language configuration locales in all Android versions"
                 url = "https://github.com/erfansn/locale-config-x"
                 licenses {
                     license {

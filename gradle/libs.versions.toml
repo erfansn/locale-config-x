@@ -1,16 +1,16 @@
 [versions]
-agp = "8.5.0"
-androidxCoreKtxVersion = "1.5.0"
-kotlin = "2.0.0"
-coreKtx = "1.13.1"
+agp = "8.13.0"
+androidxCoreKtxVersion = "1.7.0"
+kotlin = "2.2.20"
+coreKtx = "1.17.0"
 junit = "4.13.2"
-junitVersion = "1.1.5"
-espressoCore = "3.5.1"
-lifecycleRuntimeKtx = "2.8.2"
-activityCompose = "1.9.0"
-composeBom = "2024.06.00"
-appcompatVersion = "1.7.0"
-runner = "1.5.2"
+junitVersion = "1.3.0"
+espressoCore = "3.7.0"
+lifecycleRuntimeKtx = "2.9.3"
+activityCompose = "1.10.1"
+composeBom = "2025.08.01"
+appcompatVersion = "1.7.1"
+runner = "1.7.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
